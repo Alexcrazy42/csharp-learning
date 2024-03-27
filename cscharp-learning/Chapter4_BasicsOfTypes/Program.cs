@@ -1,4 +1,4 @@
-﻿namespace cscharp_learning.Chapter4;
+﻿namespace csharp_learning.Chapter4;
 
 class Chapter4Class
 {

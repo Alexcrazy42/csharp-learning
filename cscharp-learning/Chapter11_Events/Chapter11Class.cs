@@ -1,4 +1,4 @@
-﻿namespace cscharp_learning.Chapter11_Events;
+﻿namespace csharp_learning.Chapter11_Events;
 
 public class Chapter11Class
 {

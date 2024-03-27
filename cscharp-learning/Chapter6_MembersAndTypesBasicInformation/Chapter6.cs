@@ -1,7 +1,7 @@
 ﻿using CompanyB;
 using CompanyA;
 
-namespace cscharp_learning.Chapter6;
+namespace csharp_learning.Chapter6;
 
 public partial class Chapter6Class
 {

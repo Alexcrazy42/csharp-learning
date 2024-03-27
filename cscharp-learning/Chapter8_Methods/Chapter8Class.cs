@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace cscharp_learning.Chapter8;
+namespace csharp_learning.Chapter8;
 
 public class Chapter8Class
 {

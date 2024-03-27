@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cscharp_learning.Chapter10;
+namespace csharp_learning.Chapter10;
 
 public class Chapter10Class
 {

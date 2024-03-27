@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace cscharp_learning.Chapter5;
+namespace csharp_learning.Chapter5;
 
 public class Chapter5Class
 {

@@ -7,6 +7,7 @@ using csharp_learning.Chapter9;
 using csharp_learning.Chapter10;
 using csharp_learning.Chapter11_Events;
 using csharp_learning.Chapter12_Generalization;
+using csharp_learning.Chapter13_Interfaces;
 
 namespace csharp_learning;
 
@@ -14,7 +15,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Chapter12Class chapter12Class = new Chapter12Class();
-        chapter12Class.Execute();
+        Chapter13Class chapter = new Chapter13Class();
+        chapter.Execute();
     }
 }

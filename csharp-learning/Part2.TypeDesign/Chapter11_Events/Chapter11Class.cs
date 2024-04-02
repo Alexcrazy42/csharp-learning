@@ -1,4 +1,4 @@
-﻿namespace csharp_learning.Chapter11_Events;
+﻿namespace csharp_learning.Part2.TypeDesign.Chapter11_Events;
 
 public class Chapter11Class
 {
@@ -25,20 +25,20 @@ public class Chapter11Class
 // передается получателем уведомления о событии
 public class NewMailEventArgs : EventArgs
 {
-    private readonly String from, subject, to;
+    private readonly string from, subject, to;
 
-    public NewMailEventArgs(String from, String to, String subject)
+    public NewMailEventArgs(string from, string to, string subject)
     {
         this.from = from;
         this.to = to;
         this.subject = subject;
     }
 
-    public String From { get { return from; } }
+    public string From { get { return from; } }
 
-    public String To { get { return to; } }
+    public string To { get { return to; } }
 
-    public String Subject { get { return subject; } }
+    public string Subject { get { return subject; } }
 }
 
 
@@ -78,7 +78,7 @@ public class MailManager
     }
 
     // Этап 4. Определение метода, транслирующего входную информацию в желаемое событие
-    public void SimulateNewMail(String from, String to, String subject)
+    public void SimulateNewMail(string from, string to, string subject)
     {
         // создать объекты для хранения информации, которую 
         // нужно передать получателям уведомления
@@ -94,7 +94,7 @@ public class MailManager
 // класс расширения для того, чтобы вынести логику уведомления подписчиков уведомления
 public static class EventArgExtensions
 {
-    public static void Raise<TEventArgs>(this TEventArgs e, Object sender, ref EventHandler<TEventArgs> eventDelegate)
+    public static void Raise<TEventArgs>(this TEventArgs e, object sender, ref EventHandler<TEventArgs> eventDelegate)
         where TEventArgs : EventArgs
     {
         EventHandler<TEventArgs> temp = Interlocked.CompareExchange(ref eventDelegate, null, null);
@@ -115,7 +115,7 @@ public class Fax
 
     // MailManager вызывает этот метод для уведомления
     // объекта Fax о прибытии нового почтового сообщения
-    private void FaxMsg(Object sender, NewMailEventArgs e)
+    private void FaxMsg(object sender, NewMailEventArgs e)
     {
         // sender можно использовать для взаимодействия с объектом MailManager
         // если нужно вернуть ему какую-то информацию 
@@ -135,7 +135,7 @@ public class Fax
 
 // этот класс нужен для поддержания безопасности типа
 // и кода при использовании EventSet
-public sealed class EventKey : Object { }
+public sealed class EventKey : object { }
 
 public sealed class EventSet
 {
@@ -164,7 +164,7 @@ public sealed class EventSet
         // при попытке удалить делегат из неустановленного 
         // ключа EventKey
         Delegate d;
-        if(events.TryGetValue(key, out d))
+        if (events.TryGetValue(key, out d))
         {
             d = Delegate.Remove(d, handler);
 
@@ -183,7 +183,7 @@ public sealed class EventSet
     }
 
     // поднятие события для обозначенного ключа EventKey
-    public void Raise(EventKey key, Object sender, EventArgs e)
+    public void Raise(EventKey key, object sender, EventArgs e)
     {
         Delegate d;
         Monitor.Enter(events);
@@ -199,7 +199,7 @@ public sealed class EventSet
             // DynamicInvoke будет контролировать безопасность типов параметров метода 
             // обратного вызова и вызов этого метода. Если будет найдено 
             // несоответствие типов, вбрасывается исключение
-            d.DynamicInvoke(new Object[] { sender, e } );
+            d.DynamicInvoke(new object[] { sender, e });
         }
     }
 

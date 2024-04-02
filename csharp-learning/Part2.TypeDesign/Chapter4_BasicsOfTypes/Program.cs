@@ -1,4 +1,4 @@
-﻿namespace csharp_learning.Chapter4;
+﻿namespace csharp_learning.Part2.TypeDesign.Chapter4_BasicsOfTypes;
 
 class Chapter4Class
 {

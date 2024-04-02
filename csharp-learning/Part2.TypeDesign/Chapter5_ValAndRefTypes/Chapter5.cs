@@ -1,28 +1,28 @@
 ﻿using System.Collections;
 
-namespace csharp_learning.Chapter5;
+namespace csharp_learning.Part2.TypeDesign.Chapter5_ValAndRefTypes;
 
 public class Chapter5Class
 {
     public void Execute()
     {
         // явное и неявное приведение между примитными числами
-        Int32 i = 100;
-        Int64 l = i;
-        Byte b = (Byte)i;
-        Int16 v = (Int16)i;
+        int i = 100;
+        long l = i;
+        byte b = (byte)i;
+        short v = (short)i;
 
         // литералы
-        Boolean found = false;
-        Int32 x = 100 + 23; // компилятор видит: Int32 = 123;
-        String s = "a" + "bcd"; // String s = "abcd";
+        bool found = false;
+        int x = 100 + 23; // компилятор видит: Int32 = 123;
+        string s = "a" + "bcd"; // String s = "abcd";
 
         // overflow
         // b и 200 сначала преобразуются в 32 или 64 разрядные операнды, посколько 
         // все арифметичные операции в clr выполняются только над 32и 64 разрядными числами
-        b = (Byte)(b + 200); // по умолчанию unchecked операция
+        b = (byte)(b + 200); // по умолчанию unchecked операция
         //b = checked ((Byte)(b + 300)); // OverflowException
-        b = (Byte)checked(b + 200); // ошибки не будет, т.к. приведение к byte вывели из оператора checked
+        b = (byte)checked(b + 200); // ошибки не будет, т.к. приведение к byte вывели из оператора checked
 
         checked
         {
@@ -45,7 +45,7 @@ public class Chapter5Class
         // boxing/unboxing
         ArrayList arrayList = new ArrayList();
         SomeVal point; // выделяется память под SomeVal в стеке
-        for(int item = 0; item < 10; item++)
+        for (int item = 0; item < 10; item++)
         {
             point.x = point.y = item; // инициализация членов в значимом типе
             arrayList.Add(point); // упаковка значимого типа и добавление ссылки в ArrayList
@@ -58,14 +58,14 @@ public class Chapter5Class
 
         SomeVal p = (SomeVal)arrayList[0]; // распаковка (часть 9 README.md)
 
-        Int32 x1 = 5;
-        Object o = x;
+        int x1 = 5;
+        object o = x;
         //Int16 x2 = (Int16)o; // InvalidCastException
-        Int16 x3 = (Int16)(Int32)x1; // распаковка затем приведение типа
+        short x3 = (short)x1; // распаковка затем приведение типа
 
         SomeVal p1;
         p1.x = p1.y = 3;
-        Object o1 = p1;
+        object o1 = p1;
         p1.x = 2; // изменяется поле значимого типа p1 в стеке, никак не влияет на объект из heap
         o1 = p1; // упаковка, создающая новый объект в heap
 
@@ -102,7 +102,7 @@ public class Chapter5Class
         p3.Change(2, 2);
         Console.WriteLine(p3);
 
-        Object o3 = p3;
+        object o3 = p3;
         Console.WriteLine(o3);
 
         ((Point)o3).Change(3, 3); // при таком приведении o3 распаковывается и поля упакованного объекта типа Point
@@ -127,34 +127,34 @@ public class Chapter5Class
 
     }
 
-    public void SomeMethod(Int32 i)
+    public void SomeMethod(int i)
     {
-        Byte b = (Byte)i;
+        byte b = (byte)i;
     }
 
     public class SomeRef
     {
-        public Int32 x;
+        public int x;
     }
 
     public struct SomeVal : IComparable
     {
-        public Int32 x;
-        public Int32 y;
+        public int x;
+        public int y;
 
         public override string ToString()
         {
             return $"({x} : {y})";
         }
 
-        public Int32 CompareTo(SomeVal other)
+        public int CompareTo(SomeVal other)
         {
-            return Math.Sign(Math.Sqrt(x*x + y*y) - Math.Sqrt(other.x * other.x + other.y * other.y));
+            return Math.Sign(Math.Sqrt(x * x + y * y) - Math.Sqrt(other.x * other.x + other.y * other.y));
         }
 
-        public Int32 CompareTo(Object o)
+        public int CompareTo(object o)
         {
-            if(GetType() != o.GetType())
+            if (GetType() != o.GetType())
             {
                 throw new ArgumentException("o in not a SomeVal");
             }
@@ -164,20 +164,20 @@ public class Chapter5Class
 
     public interface IChangedBoxedPoint
     {
-        void Change(Int32 x, Int32 y);
+        void Change(int x, int y);
     }
 
     public struct Point : IChangedBoxedPoint
     {
-        private Int32 x, y;
+        private int x, y;
 
-        public Point(Int32 x, Int32 y)
+        public Point(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public void Change(Int32 x, Int32 y)
+        public void Change(int x, int y)
         {
             this.x = x;
             this.y = y;
@@ -188,7 +188,7 @@ public class Chapter5Class
             return $"{x} : {y}";
         }
     }
-    
+
     public void Print(string str)
     {
         Console.WriteLine(str);

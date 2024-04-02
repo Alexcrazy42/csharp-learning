@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace csharp_learning.Chapter8;
+namespace csharp_learning.Part2.TypeDesign.Chapter8_Methods;
 
 public class Chapter8Class
 {

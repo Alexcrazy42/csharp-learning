@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharp_learning.Chapter10;
+namespace csharp_learning.Part2.TypeDesign.Chapter10_Properties;
 
 public class Chapter10Class
 {
@@ -29,7 +29,7 @@ public class Chapter10Class
         Console.WriteLine(o1.Name);
         Console.WriteLine(o1.Year);
 
-        String Name = "Grant";
+        string Name = "Grant";
         DateTime dt = DateTime.Now;
 
         // анонимный тип с двумя свойствами
@@ -43,7 +43,7 @@ public class Chapter10Class
         // выделить массив BitArray, которые может хранить 14 бит
         BitArray ba = new BitArray(14);
 
-        for (Int32 x = 0; x < 14; x++)
+        for (int x = 0; x < 14; x++)
         {
             Console.WriteLine($"Bit {x} is {(ba[x] ? "On" : "Off")}");
         }
@@ -55,9 +55,9 @@ public class Chapter10Class
 // определение типа с помощью полей
 class Employee
 {
-    public String Name;
+    public string Name;
 
-    public Int32 Age;
+    public int Age;
 }
 
 // при компиляции этого типа csc обнаружит свойства Name и Age
@@ -66,16 +66,16 @@ class Employee
 // csc автоматически генерирует имена этих методов, прибавляя приставки get_ и set_ к имени свойства.
 public class EmployeeWithProperies
 {
-    private String name;
-    private Int32 age;
+    private string name;
+    private int age;
 
-    public String Name
+    public string Name
     {
-        get { return name; } 
+        get { return name; }
         set { name = value; } // ключевое слово value индентифицирует новое значение
     }
 
-    public Int32 Age
+    public int Age
     {
         get { return age; }
         set
@@ -88,7 +88,7 @@ public class EmployeeWithProperies
         }
     }
 
-    public EmployeeWithProperies(String name, Int32 age)
+    public EmployeeWithProperies(string name, int age)
     {
         Name = name;
         Age = age;
@@ -97,11 +97,11 @@ public class EmployeeWithProperies
 
 public sealed class EmployeeWithAip
 {
-    public String Name { get; set; } // csc автоматически создаст нужные аксессоры
+    public string Name { get; set; } // csc автоматически создаст нужные аксессоры
 
-    private Int32 age;
+    private int age;
 
-    public Int32 Age
+    public int Age
     {
         get { return age; }
         set
@@ -114,14 +114,14 @@ public sealed class EmployeeWithAip
 
 public class SomeType
 {
-    private static String Name
+    private static string Name
     {
         get
         { return null; }
         set { }
     }
 
-    public static void MethodWithOutParam(out String n) { n = null; }
+    public static void MethodWithOutParam(out string n) { n = null; }
 
     public static void M()
     {
@@ -133,11 +133,11 @@ public class SomeType
 
 public class BitArray
 {
-    private Byte[] byteArray;
-    private Int32 numBits;
+    private byte[] byteArray;
+    private int numBits;
 
     // конструктор, выделяющий память для байтового массива и устанавливающий все биты в 0
-    public BitArray(Int32 numBits)
+    public BitArray(int numBits)
     {
         if (numBits <= 0)
         {
@@ -145,33 +145,33 @@ public class BitArray
         }
 
         this.numBits = numBits;
-        byteArray = new Byte[(numBits + 7) / 8];
+        byteArray = new byte[(numBits + 7) / 8];
     }
 
     // Это индексатор (свойство с параметрами)
-    public Boolean this[Int32 bitPos]
+    public bool this[int bitPos]
     {
         get
         {
-            if ((bitPos < 0) || (bitPos >= numBits))
+            if (bitPos < 0 || bitPos >= numBits)
             {
                 throw new ArgumentOutOfRangeException("bitPos");
             }
-            return (byteArray[bitPos / 8] & (1 << (bitPos % 8))) != 0;
+            return (byteArray[bitPos / 8] & 1 << bitPos % 8) != 0;
         }
         set
         {
-            if ((bitPos < 0) || (bitPos >= numBits))
+            if (bitPos < 0 || bitPos >= numBits)
             {
                 throw new ArgumentOutOfRangeException("bitPos");
             }
             if (value)
             {
-                byteArray[bitPos / 8] = (Byte) (byteArray[bitPos / 8] | (1 << (bitPos % 8)));
+                byteArray[bitPos / 8] = (byte)(byteArray[bitPos / 8] | 1 << bitPos % 8);
             }
             else
             {
-                byteArray[bitPos / 8] = (Byte) (byteArray[bitPos / 8] & ~(1 << (bitPos % 8)));
+                byteArray[bitPos / 8] = (byte)(byteArray[bitPos / 8] & ~(1 << bitPos % 8));
             }
         }
     }

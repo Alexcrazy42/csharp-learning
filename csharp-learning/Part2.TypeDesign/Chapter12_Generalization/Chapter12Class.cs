@@ -3,7 +3,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace csharp_learning.Chapter12_Generalization;
+namespace csharp_learning.Part2.TypeDesign.Chapter12_Generalization;
 
 public class Chapter12Class
 {
@@ -30,7 +30,7 @@ public class Chapter12Class
             ,23 seconds (GCs=  4) ArrayList of String
         */
 
-        Object o = null;
+        object o = null;
 
         // Dictionary<,> - это открытый тип с двумя параметрами типа
         Type t = typeof(Dictionary<,>);
@@ -55,33 +55,33 @@ public class Chapter12Class
 
 
         Console.WriteLine("--------------------------------------------");
-        Node<Char> head = new('C');
+        Node<char> head = new('C');
         head = new('B', head);
         head = new('A', head);
         Console.WriteLine(head.ToString());
 
-        Node head1 = new TypedNode<Char>('A');
+        Node head1 = new TypedNode<char>('A');
         head1 = new TypedNode<int>(3, head1);
         head1 = new TypedNode<DateTime>(DateTime.Now, head1);
         Console.WriteLine(head1.ToString());
 
         Console.WriteLine("--------------------------------------------");
 
-        IList<String> ls = new List<String>();
+        IList<string> ls = new List<string>();
         ls.Add("String");
 
         // преобразует IList<String> в IList<Object>
-        IList<Object> lo = ConvertClass.ConvertIList<String, Object>(ls);
+        IList<object> lo = ConvertClass.ConvertIList<string, object>(ls);
 
         // преобразует IList<String> в IList<IComparable>
-        IList<IComparable> lc = ConvertClass.ConvertIList<String, IComparable>(ls);
+        IList<IComparable> lc = ConvertClass.ConvertIList<string, IComparable>(ls);
 
         // преобразует IList<String> в IList<IComparable<String>>
-        IList<IComparable<String>> lcs = ConvertClass.ConvertIList<String, IComparable<String>>(ls);
+        IList<IComparable<string>> lcs = ConvertClass.ConvertIList<string, IComparable<string>>(ls);
 
         // преобразует IList<String> в IList<String>
         // тип совместим сам с собой
-        IList<String> ls2 = ConvertClass.ConvertIList<String, String>(ls);
+        IList<string> ls2 = ConvertClass.ConvertIList<string, string>(ls);
 
         // преобразует IList<String> в IList<Exception>, ошибка
         // Тип string не может быть использован, как параметр типа T, в универсальном типе или методе
@@ -89,9 +89,9 @@ public class Chapter12Class
         // IList<Exception> le = ConvertClass.ConvertIList<String, Exception>(ls);
     }
 
-    private Object Createlnstance(Type t)
+    private object Createlnstance(Type t)
     {
-        Object o = null;
+        object o = null;
         try
         {
             o = Activator.CreateInstance(t);
@@ -106,26 +106,26 @@ public class Chapter12Class
 
     private void ValueTypePerfTest()
     {
-        const Int32 count = 10_000_000;
+        const int count = 10_000_000;
 
         using (new OperationTimer("List<Int32>"))
         {
-            List<Int32> l = new();
-            for (Int32 n = 0; n < count; n++)
+            List<int> l = new();
+            for (int n = 0; n < count; n++)
             {
                 l.Add(n);
-                Int32 x = l[n];
+                int x = l[n];
             }
             l = null; // объекта из heap удалиться в процессе сборки мусора
         }
-        
+
         using (new OperationTimer("ArrayList of Int32"))
         {
             ArrayList al = new();
-            for (Int32 n = 0; n < count; n++)
+            for (int n = 0; n < count; n++)
             {
                 al.Add(n);
-                Int32 x = (Int32)al[n];
+                int x = (int)al[n];
             }
             al = null;
         }
@@ -133,25 +133,25 @@ public class Chapter12Class
 
     private void RefTypePerfTest()
     {
-        const Int32 count = 10_000_000;
-        using(new OperationTimer("List<String>"))
+        const int count = 10_000_000;
+        using (new OperationTimer("List<String>"))
         {
-            List<String> l = new();
-            for (Int32 n = 0; n < count; n++)
+            List<string> l = new();
+            for (int n = 0; n < count; n++)
             {
                 l.Add("X");
-                String x = l[n];
+                string x = l[n];
             }
             l = null; // объекта из heap удалиться в процессе сборки мусора
         }
-        
+
         using (new OperationTimer("ArrayList of String"))
         {
             ArrayList al = new();
-            for (Int32 n = 0; n < count; n++)
+            for (int n = 0; n < count; n++)
             {
                 al.Add("X");
-                String x = (String)al[n];
+                string x = (string)al[n];
             }
             al = null;
         }
@@ -161,11 +161,11 @@ public class Chapter12Class
 // класс для оценки времени выполнения алгоритма
 public sealed class OperationTimer : IDisposable
 {
-    private Int64 startTime;
-    private String text;
-    private Int32 collectionCount;
+    private long startTime;
+    private string text;
+    private int collectionCount;
 
-    public OperationTimer(String text)
+    public OperationTimer(string text)
     {
         PrepareForOperation();
         this.text = text;
@@ -178,9 +178,9 @@ public sealed class OperationTimer : IDisposable
 
     public void Dispose()
     {
-        Console.WriteLine("{0,6:###.00} seconds (GCs={1,3}) {2}", 
-            (Stopwatch.GetTimestamp() - startTime) / (Double) Stopwatch.Frequency, 
-            GC.CollectionCount(0) - collectionCount, 
+        Console.WriteLine("{0,6:###.00} seconds (GCs={1,3}) {2}",
+            (Stopwatch.GetTimestamp() - startTime) / (double)Stopwatch.Frequency,
+            GC.CollectionCount(0) - collectionCount,
             text);
     }
 
@@ -193,9 +193,9 @@ public sealed class OperationTimer : IDisposable
 }
 
 // частично определнный открытый тип
-public sealed class DictionaryStringKey<TValue> : Dictionary<String, TValue>
+public sealed class DictionaryStringKey<TValue> : Dictionary<string, TValue>
 {
-    
+
 }
 
 public sealed class GenericTypeThatRequiresAnEnum<T>
@@ -234,7 +234,7 @@ public sealed class Node<T>
 public class Node
 {
     protected Node next;
-    
+
     public Node(Node next)
     {
         this.next = next;
@@ -248,7 +248,7 @@ public class TypedNode<T> : Node
 
     public TypedNode(T data) : this(data, null)
     { }
-    
+
     public TypedNode(T data, Node next) : base(next)
     {
         this.data = data;
@@ -256,7 +256,7 @@ public class TypedNode<T> : Node
 
     public override string ToString()
     {
-        return data.ToString() + (next != null ? 
+        return data.ToString() + (next != null ?
             "->" + next.ToString() : null);
     }
 }
@@ -293,7 +293,7 @@ public class ConvertClass
         where T : TBase
     {
         List<TBase> baseList = new List<TBase>(list.Count);
-        for (Int32 index = 0; index < list.Count; index++)
+        for (int index = 0; index < list.Count; index++)
         {
             baseList.Add(list[index]);
         }
@@ -302,7 +302,7 @@ public class ConvertClass
 }
 
 
-public sealed class ConstructorContraint<T> 
+public sealed class ConstructorContraint<T>
     where T : new()
 {
     public static T Factory()

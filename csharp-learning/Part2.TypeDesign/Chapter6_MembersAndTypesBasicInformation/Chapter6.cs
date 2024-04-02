@@ -1,11 +1,8 @@
-﻿using CompanyB;
-using CompanyA;
-
-namespace csharp_learning.Chapter6;
+﻿namespace csharp_learning.Part2.TypeDesign.Chapter6_MembersAndTypesBasicInformation;
 
 public partial class Chapter6Class
 {
-    public Int32 GetFive() => 5;
+    public int GetFive() => 5;
 
     public void Execute()
     {
@@ -29,9 +26,9 @@ public partial class Chapter6Class
 
         Phone p = null;
         //Int32 x = p.GetFive(); // NullReferenceException
-                               // для компилятора все ок - для вызова невиртуального экземплярного метода GetFive среде CLR необходимо узнать
-                               // только тип p, а это Chapter6Class. При вызове GetFive аргумент this равен null, но в методе GetFive он не используется, 
-                               // поэтому исключения нет. Однако csc вместо инструкции call вставляет callvirt, поэтому код вызовет NullRefException
+        // для компилятора все ок - для вызова невиртуального экземплярного метода GetFive среде CLR необходимо узнать
+        // только тип p, а это Chapter6Class. При вызове GetFive аргумент this равен null, но в методе GetFive он не используется, 
+        // поэтому исключения нет. Однако csc вместо инструкции call вставляет callvirt, поэтому код вызовет NullRefException
 
         Point p1 = new Point(3, 4);
 
@@ -59,13 +56,13 @@ public partial class Chapter6Class
 
         }
 
-        public static String AStaticProperty
+        public static string AStaticProperty
         {
             get { return s_AStaticField; }
             private set { s_AStaticField = value; }
         }
 
-        private static String s_AStaticField;
+        private static string s_AStaticField;
 
         public static event EventHandler AStaticEvent;
     }
@@ -79,19 +76,19 @@ public partial class Chapter6Class
         public string Name { get; private set; }
 
         // невиртуальный экземплярный метод
-        public Int32 GetYearsEmployedQ()
+        public int GetYearsEmployedQ()
         {
             return 1;
         }
 
         // виртуальный метод (виртуальный, значит, экземплярный)
-        public virtual String GenProgressReportQ()
+        public virtual string GenProgressReportQ()
         {
             return "123";
         }
 
         // статический метод
-        public static Employee Lookup(String name)
+        public static Employee Lookup(string name)
         {
             return new Employee()
             {
@@ -117,22 +114,22 @@ public partial class Chapter6Class
 
     public class Set
     {
-        private Int32 length = 0;
+        private int length = 0;
 
         // этот перегруженный метод - невиртуальный
-        public Int32 Find(Object value)
+        public int Find(object value)
         {
             return Find(value, 0, length);
         }
 
         // этот перегруженный метод - невиртуальный
-        public Int32 Find(Object value, Int32 startIndex)
+        public int Find(object value, int startIndex)
         {
             return Find(value, 0, length);
         }
 
         // наиболее функциональный метод сделан виртуальным
-        public virtual Int32 Find(Object value, Int32 startIndex, Int32 endIndex)
+        public virtual int Find(object value, int startIndex, int endIndex)
         {
             // настоящая реализация, которую можно переопределить
             return startIndex - endIndex;
@@ -141,15 +138,15 @@ public partial class Chapter6Class
 
     public sealed class Point
     {
-        private Int32 x, y;
-        
-        public Point(Int32 x, Int32 y)
+        private int x, y;
+
+        public Point(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return $"{x} : {y}";
         }
@@ -157,20 +154,20 @@ public partial class Chapter6Class
 
     public class NotSealedPoint
     {
-        private Int32 x, y;
+        private int x, y;
 
-        public NotSealedPoint(Int32 x, Int32 y)
+        public NotSealedPoint(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return $"{x} : {y}";
         }
 
-        public virtual String PrintName()
+        public virtual string PrintName()
         {
             return "NotSealedPoint";
         }

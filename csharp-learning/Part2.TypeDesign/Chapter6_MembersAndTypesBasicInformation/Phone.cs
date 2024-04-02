@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CompanyA;
+namespace csharp_learning.Part2.TypeDesign.Chapter6_MembersAndTypesBasicInformation;
 
 public class Phone
 {

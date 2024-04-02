@@ -1,13 +1,13 @@
-﻿namespace csharp_learning.Chapter7;
+﻿namespace csharp_learning.Part2.TypeDesign.Chapter7_ConstsAndFields;
 
 public class Chapter7Class
 {
     public void Execute()
     {
         SomeType.numberOfWrites = 1; // изменит static поле типа
-                                     
+
         // SomeType.random = new Random(); // присваивание значения доступному только для чтения 
-                                        // статическому полю допускается только в статическом конструкторе и в инициализаторе переменных
+        // статическому полю допускается только в статическом конструкторе и в инициализаторе переменных
 
         // ok
         AType.InvalidChars[0] = 'X';
@@ -24,7 +24,7 @@ public class Chapter7Class
 public sealed class SomeLibraryType
 {
     // модификатор static необходим, чтобы ассоциировать поле с его типом
-    public static readonly Int32 MaxEntriesInList = 50;
+    public static readonly int MaxEntriesInList = 50;
 }
 
 public sealed class SomeType
@@ -34,10 +34,10 @@ public sealed class SomeType
     public static readonly Random random = new Random();
 
     // это статическое изменяемое поле
-    public static Int32 numberOfWrites = 0;
+    public static int numberOfWrites = 0;
 
     // неизменяемое экземплярное поле
-    public readonly String PathName = "pathName";
+    public readonly string PathName = "pathName";
 
     // изменяемое экземплярное поле
     public FileStream fs;
@@ -60,5 +60,5 @@ public sealed class SomeType
 
 public sealed class AType
 {
-    public static readonly Char[] InvalidChars = new Char[] { 'A', 'B', 'C' };
+    public static readonly char[] InvalidChars = new char[] { 'A', 'B', 'C' };
 }

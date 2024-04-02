@@ -1,13 +1,14 @@
-﻿using csharp_learning.Chapter4;
-using csharp_learning.Chapter5;
-using csharp_learning.Chapter6;
-using csharp_learning.Chapter7;
-using csharp_learning.Chapter8;
-using csharp_learning.Chapter9;
-using csharp_learning.Chapter10;
-using csharp_learning.Chapter11_Events;
-using csharp_learning.Chapter12_Generalization;
-using csharp_learning.Chapter13_Interfaces;
+﻿using csharp_learning.Part2.TypeDesign.Chapter4_BasicsOfTypes;
+using csharp_learning.Part2.TypeDesign.Chapter5_ValAndRefTypes;
+using csharp_learning.Part2.TypeDesign.Chapter6_MembersAndTypesBasicInformation;
+using csharp_learning.Part2.TypeDesign.Chapter7_ConstsAndFields;
+using csharp_learning.Part2.TypeDesign.Chapter8_Methods;
+using csharp_learning.Part2.TypeDesign.Chapter9_Params;
+using csharp_learning.Part2.TypeDesign.Chapter10_Properties;
+using csharp_learning.Part2.TypeDesign.Chapter11_Events;
+using csharp_learning.Part2.TypeDesign.Chapter12_Generalization;
+using csharp_learning.Part2.TypeDesign.Chapter13_Interfaces;
+using csharp_learning.Part3.BasicDataTypes.Chapter14_Symbols_Strings_TextProcessing;
 
 namespace csharp_learning;
 
@@ -15,7 +16,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Chapter13Class chapter = new Chapter13Class();
+        Chapter14Class chapter = new Chapter14Class();
         chapter.Execute();
     }
 }

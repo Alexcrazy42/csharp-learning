@@ -13,10 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Chapter10_Properties\images\" />
-    <Folder Include="Chapter11_Events\images\" />
-    <Folder Include="Chapter12_Generalization\images\" />
-    <Folder Include="Chapter13_Interfaces\images\" />
+    <Folder Include="Part2.TypeDesign\Chapter10_Properties\images\" />
+    <Folder Include="Part2.TypeDesign\Chapter11_Events\images\" />
+    <Folder Include="Part2.TypeDesign\Chapter13_Interfaces\images\" />
+    <Folder Include="Part1.CLRBasics\" />
+    <Folder Include="Part3.BasicDataTypes\Chapter14_Symbols_Strings_TextProcessing\images\" />
   </ItemGroup>
 
 </Project>

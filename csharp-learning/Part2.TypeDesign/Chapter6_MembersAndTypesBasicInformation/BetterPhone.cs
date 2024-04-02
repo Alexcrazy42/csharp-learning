@@ -1,6 +1,4 @@
-﻿using CompanyA;
-
-namespace CompanyB;
+﻿namespace csharp_learning.Part2.TypeDesign.Chapter6_MembersAndTypesBasicInformation;
 
 internal class BetterPhone : Phone
 {

@@ -6,6 +6,7 @@
     <RootNamespace>csharp_learning</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
     <Folder Include="Part2.TypeDesign\Chapter13_Interfaces\images\" />
     <Folder Include="Part1.CLRBasics\" />
     <Folder Include="Part3.BasicDataTypes\Chapter14_Symbols_Strings_TextProcessing\images\" />
+    <Folder Include="Part3.BasicDataTypes\Chapter15_EnumTypesAndBitFlags\images\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 
 namespace csharp_learning.Part3.BasicDataTypes.Chapter14_Symbols_Strings_TextProcessing;
@@ -139,6 +141,96 @@ public class Chapter14Class
         s = sb.ToString();
 
         Console.WriteLine(s);
+
+        Console.WriteLine("-------------------------------------");
+        String s3 = "Hi there";
+        Encoding encodingUTF8 = Encoding.UTF8;
+        Byte[] encodedBytes = encodingUTF8.GetBytes(s3);
+
+        Console.WriteLine($"Encoded Bytes: {BitConverter.ToString(encodedBytes)}");
+
+        String decodedString = encodingUTF8.GetString(encodedBytes);
+
+        Console.WriteLine($"Decoded string: {decodedString}");
+
+        Console.WriteLine("-------------------------------------");
+
+        // программа, в которой свойства вызываются для разных вариантов кодирования
+        foreach (EncodingInfo ei in Encoding.GetEncodings())
+        {
+            Encoding e = ei.GetEncoding();
+            Console.WriteLine($"{e.EncodingName} {Environment.NewLine}" +
+                $"\tCodePage = {e.CodePage}, WindowsCodePage = {e.WindowsCodePage}{Environment.NewLine}" +
+                $"\tWebName = {e.WebName}, HeaderName = {e.HeaderName}, BodyName = {e.BodyName} {Environment.NewLine}" +
+                $"\tIsBrowserDisplay = {e.IsBrowserDisplay}, IsBrowserSave = {e.IsBrowserSave}{Environment.NewLine}" +
+                $"\tIsMailNewsDisplay = {e.IsMailNewsDisplay}, IsMailNewsSave = {e.IsMailNewsDisplay} {Environment.NewLine}");
+        }
+
+        Console.WriteLine("---------------------------------------");
+        // подредаченная версия, где можно удалять последний символ
+        using (SecureString ss = new SecureString())
+        {
+            Console.Write("Please enter password: ");
+            while (true)
+            {
+                ConsoleKeyInfo cki = Console.ReadKey(true);
+                if (cki.Key == ConsoleKey.Enter) break;
+                if (cki.Key != ConsoleKey.Backspace)
+                {
+                    ss.AppendChar(cki.KeyChar);
+                    Console.Write("*");
+                }
+                else
+                {
+                    if (ss.Length > 0)
+                    {
+                        ss.RemoveAt(ss.Length - 1);
+                        ClearLastCharacter();
+                    }
+                }
+                
+                
+            }
+            Console.WriteLine();
+            // Пароль введен, отобразим его для демонстрационных целей
+            DisplaySecureString(ss);
+        }
+    }
+
+    private void ClearLastCharacter()
+    {
+        int currentLineCursorLeft = Console.CursorLeft;
+        int currentLineCursorTop = Console.CursorTop;
+        Console.SetCursorPosition(currentLineCursorLeft-1, currentLineCursorTop);
+        for (int i = 0; i < 1; i++)
+        {
+            Console.Write(" ");
+        }
+        Console.SetCursorPosition(currentLineCursorLeft-1, currentLineCursorTop);
+    }
+
+    // этот метод небезопасен, потому что обращается к неуправляемой памяти
+    private unsafe static void DisplaySecureString(SecureString ss)
+    {
+        Char* pc = null;
+        try
+        {
+            // расшифровка SecureString из неуправляемой памяти
+            pc = (Char*)Marshal.SecureStringToCoTaskMemUnicode(ss);
+
+            // доступ к буферу неуправляемой памятию, который хранит расшифрованную версию SecureString
+            for (Int32 x = 0; pc[x] != 0; x++)
+            {
+                Console.Write(pc[x]);
+            }
+        }
+        finally
+        {
+            if (pc != null)
+            {
+                Marshal.ZeroFreeCoTaskMemUnicode((IntPtr)pc);
+            }
+        }
     }
 
     // Как видите, этот метод вызывает метод Equals типа Stri ng, который сравнивает

@@ -20,6 +20,9 @@
     <Folder Include="Part1.CLRBasics\" />
     <Folder Include="Part3.BasicDataTypes\Chapter14_Symbols_Strings_TextProcessing\images\" />
     <Folder Include="Part3.BasicDataTypes\Chapter15_EnumTypesAndBitFlags\images\" />
+    <Folder Include="Part3.BasicDataTypes\Chapter16_Arrays\images\" />
+    <Folder Include="Part3.BasicDataTypes\Chapter17_Delegates\images\" />
+    <Folder Include="Part3.BasicDataTypes\Chapter18_CustomizedAttributes\images\" />
   </ItemGroup>
 
 </Project>

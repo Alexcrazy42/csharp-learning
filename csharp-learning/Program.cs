@@ -10,6 +10,9 @@ using csharp_learning.Part2.TypeDesign.Chapter12_Generalization;
 using csharp_learning.Part2.TypeDesign.Chapter13_Interfaces;
 using csharp_learning.Part3.BasicDataTypes.Chapter14_Symbols_Strings_TextProcessing;
 using csharp_learning.Part3.BasicDataTypes.Chapter15_EnumTypesAndBitFlags;
+using csharp_learning.Part3.BasicDataTypes.Chapter16_Arrays;
+using csharp_learning.Part3.BasicDataTypes.Chapter17_Delegates;
+using csharp_learning.Part3.BasicDataTypes.Chapter18_CustomizedAttributes;
 
 namespace csharp_learning;
 
@@ -17,7 +20,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Chapter15Class chapter = new Chapter15Class();
+        var chapter = new Chapter18Class();
         chapter.Execute();
     }
 }

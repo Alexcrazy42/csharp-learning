@@ -23,6 +23,8 @@
     <Folder Include="Part3.BasicDataTypes\Chapter16_Arrays\images\" />
     <Folder Include="Part3.BasicDataTypes\Chapter17_Delegates\images\" />
     <Folder Include="Part3.BasicDataTypes\Chapter18_CustomizedAttributes\images\" />
+    <Folder Include="Part3.BasicDataTypes\Chapter19_NullCompatibleTypes\images\" />
+    <Folder Include="Part4.KeyMechanisms\Chapter20_ExceptionsAndStateControl\images\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿namespace csharp_learning.Part4.KeyMechanisms.Chapter21_GarbageCollection;
+﻿using System.Runtime.InteropServices;
+
+namespace csharp_learning.Part4.KeyMechanisms.Chapter21_GarbageCollection;
 
 public class Chapter21Class
 {
@@ -11,12 +13,26 @@ public class Chapter21Class
         //Console.ReadLine();
 
         //t.Dispose();
+        Byte[] bytes = new Byte[] { 1, 2, 3, 4, 5 };
 
-        GCNotification gcN;
-        for (int i = 0; i < 1_000_000; i++)
-        {
-            gcN = new GCNotification();
-        }
+        FileStream fs = new FileStream("temp.dat", FileMode.Create);
+        fs.Write(bytes, 0, bytes.Length);
+
+        fs.Dispose();
+
+        // Это не сработает сразу после записи в файл, так как вызов статического метода Delete
+        // объекта File заставляет Windows удалить открытый файл, поэтому 
+        // Delete генерирует исключение System.IO.IOException
+        // Однако если другой поток инициализировал уборку мусора между вызовами
+        // Write и Delete поле SafeFileHandle объекта FileStream вызывает свой
+        // метод финализации, который закрывает файл
+        File.Delete("temp.dat");
+
+        MemoryPressureDemo(0); // 0 вызывает нечастую уборку мусора
+        MemoryPressureDemo(10 * 1024 * 1024); // 10 Мб вызываеют частую 
+                                              // уборку мусора
+
+        HandleCollectorDemo();
 
 
     }
@@ -26,6 +42,92 @@ public class Chapter21Class
         Console.WriteLine($"In timerCallback: {DateTime.Now}");
         // принудительный вызов уборщика мусора в этой программе
         GC.Collect();
+    }
+
+    private static void MemoryPressureDemo(Int32 size)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"MemoryPressureDemo, size={size}");
+
+        for (int count = 0; count < 15; count++)
+        {
+            new BigNativeResource(size);
+        }
+
+        GC.Collect();
+    }
+
+    private sealed class BigNativeResource
+    {
+        private int size;
+
+        public BigNativeResource(int size)
+        {
+            this.size = size;
+
+            if (size > 0)
+            {
+                // пусть уборщик думает, что объект занимает больше памяти
+                GC.AddMemoryPressure(size);
+                Console.WriteLine("BigNativeResouce create.");
+            }
+        }
+
+        ~BigNativeResource()
+        {
+            if (size > 0)
+            {
+                // пусть уборщик думает, что объект освободил больше память
+                GC.RemoveMemoryPressure(size);
+                Console.WriteLine("BigNativeResource destroy.");
+            }
+        }
+    }
+
+    private void HandleCollectorDemo()
+    {
+        Console.WriteLine();
+        Console.WriteLine("HandleCollectorDemo");
+
+        for(int count = 0; count < 10; count++)
+        {
+            new LimitedResource();
+        }
+
+        // в демонстрационных целях очищаем все
+        GC.Collect();
+    }
+
+    private sealed class LimitedResource
+    {
+        // создаем объект HandleCollector и передаем ему указание
+        // перейти к очистке, когда в куче появится два или более 
+        // объекта LimitedResource
+        private static HandleCollector hc = new HandleCollector("LimitedResource", 2);
+
+        public LimitedResource()
+        {
+            hc.Add();
+            Console.WriteLine($"LimitedResource create. Count={hc.Count}");
+        }
+
+        ~LimitedResource()
+        {
+            // сообщаем HandleCollector, что один объект LimitedResource
+            // удален из кучи
+            hc.Remove();
+            Console.WriteLine($"LimitedResource destroy. Count={hc.Count}");
+        }
+    }
+}
+
+public sealed class SomeType
+{
+    public int a;
+
+    ~SomeType() 
+    {
+        Console.WriteLine("Some type destructor");
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace csharp_learning.Part4.KeyMechanisms.Chapter21_GarbageCollection;
 
@@ -6,7 +7,7 @@ public class Chapter21Class
 {
     
 
-    public void Execute()
+    unsafe public void Execute()
     {
         //Timer t = new Timer(TimerCallback, null, 0, 2000);
 
@@ -28,11 +29,47 @@ public class Chapter21Class
         // метод финализации, который закрывает файл
         File.Delete("temp.dat");
 
-        MemoryPressureDemo(0); // 0 вызывает нечастую уборку мусора
-        MemoryPressureDemo(10 * 1024 * 1024); // 10 Мб вызываеют частую 
-                                              // уборку мусора
+        //MemoryPressureDemo(0); // 0 вызывает нечастую уборку мусора
+        //MemoryPressureDemo(10 * 1024 * 1024); // 10 Мб вызываеют частую 
+        //                                      // уборку мусора
 
-        HandleCollectorDemo();
+        //HandleCollectorDemo();
+
+        for (int x = 0; x < 10000; x++) new Object();
+        
+        IntPtr originalMemoryAddress;
+        Byte[] bytes1 = new byte[1000];
+
+        // получаем адрес в памяти массива Byte[]
+        // инструкция fixed работает эффективней, чем выделение
+        // фиксированного GC-дескриптора. В данном случае она 
+        // заставляет установить специальный "блокирующий" флаг на локальную 
+        // переменную pbytes. Уборщик мусора, исследуя содержимое этого корня
+        // и обнаруживая отличные от null значения, понимает, что во время
+        // сжатия перемещать объект, на который ссылается эта переменная 
+        // нельзя. Компилятор C# создает IL-код, присваивающий локальной 
+        // переменной pbytes адрес объекта из начала блока fixed. При достижении
+        // конца блока компилятор создает IL-инструкцию, возвращаемую переменной
+        // pbytes значения null. Она перестает ссылаться на объект, позволяя
+        // удалить объект в ходе следующей уборки мусора
+        fixed (Byte* pbytes = bytes1)
+        {
+            originalMemoryAddress = (IntPtr)pbytes;
+        }
+
+        // мусор исчезает, позволяя сжать массив Byte[]
+        GC.Collect();
+
+
+        fixed(Byte* pbytes = bytes1)
+        {
+            string isMove = originalMemoryAddress == (IntPtr)pbytes ? " not" : "";
+            Console.WriteLine($"The Byte[] did{isMove} move during the GC");
+
+            Console.WriteLine((IntPtr)pbytes);
+            Console.WriteLine(originalMemoryAddress);
+        }
+
 
 
     }

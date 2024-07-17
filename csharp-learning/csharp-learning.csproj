@@ -26,6 +26,8 @@
     <Folder Include="Part3.BasicDataTypes\Chapter19_NullCompatibleTypes\images\" />
     <Folder Include="Part4.KeyMechanisms\Chapter20_ExceptionsAndStateControl\images\" />
     <Folder Include="Part4.KeyMechanisms\Chapter21_GarbageCollection\images\" />
+    <Folder Include="Part4.KeyMechanisms\Chapter22_CLRHostingAndAppDomains\images\" />
+    <Folder Include="Part4.KeyMechanisms\Chapter23_AssemblyLoadingAndReflection\images\" />
   </ItemGroup>
 
 </Project>

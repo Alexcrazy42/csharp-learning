@@ -16,6 +16,8 @@ using csharp_learning.Part3.BasicDataTypes.Chapter18_CustomizedAttributes;
 using csharp_learning.Part3.BasicDataTypes.Chapter19_NullCompatibleTypes;
 using csharp_learning.Part4.KeyMechanisms.Chapter20_ExceptionsAndStateControl;
 using csharp_learning.Part4.KeyMechanisms.Chapter21_GarbageCollection;
+using csharp_learning.Part4.KeyMechanisms.Chapter22_CLRHostingAndAppDomains;
+using csharp_learning.Part4.KeyMechanisms.Chapter23_AssemblyLoadingAndReflection;
 
 namespace csharp_learning;
 
@@ -23,7 +25,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var chapter = new Chapter21Class();
+        var chapter = new Chapter23Class();
         chapter.Execute();
     }
 }

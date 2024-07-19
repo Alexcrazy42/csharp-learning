@@ -18,6 +18,7 @@ using csharp_learning.Part4.KeyMechanisms.Chapter20_ExceptionsAndStateControl;
 using csharp_learning.Part4.KeyMechanisms.Chapter21_GarbageCollection;
 using csharp_learning.Part4.KeyMechanisms.Chapter22_CLRHostingAndAppDomains;
 using csharp_learning.Part4.KeyMechanisms.Chapter23_AssemblyLoadingAndReflection;
+using csharp_learning.Part4.KeyMechanisms.Chapter24_Serialization;
 
 namespace csharp_learning;
 
@@ -25,7 +26,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var chapter = new Chapter23Class();
+        var chapter = new Chapter24Class();
         chapter.Execute();
     }
 }

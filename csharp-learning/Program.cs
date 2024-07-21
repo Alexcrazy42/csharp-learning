@@ -19,6 +19,7 @@ using csharp_learning.Part4.KeyMechanisms.Chapter21_GarbageCollection;
 using csharp_learning.Part4.KeyMechanisms.Chapter22_CLRHostingAndAppDomains;
 using csharp_learning.Part4.KeyMechanisms.Chapter23_AssemblyLoadingAndReflection;
 using csharp_learning.Part4.KeyMechanisms.Chapter24_Serialization;
+using csharp_learning.Part4.KeyMechanisms.Chapter25_InteractionWithWinRTComponents;
 
 namespace csharp_learning;
 
@@ -26,7 +27,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var chapter = new Chapter24Class();
+        var chapter = new Chapter25Class();
         chapter.Execute();
     }
 }

@@ -30,6 +30,7 @@
     <Folder Include="Part4.KeyMechanisms\Chapter23_AssemblyLoadingAndReflection\images\" />
     <Folder Include="Part4.KeyMechanisms\Chapter24_Serialization\images\" />
     <Folder Include="Part4.KeyMechanisms\Chapter25_InteractionWithWinRTComponents\images\" />
+    <Folder Include="Part5.Multithreading\Chapter26_ExecutionThreads\images\" />
   </ItemGroup>
 
 </Project>

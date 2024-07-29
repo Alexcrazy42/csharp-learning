@@ -20,6 +20,8 @@ using csharp_learning.Part4.KeyMechanisms.Chapter22_CLRHostingAndAppDomains;
 using csharp_learning.Part4.KeyMechanisms.Chapter23_AssemblyLoadingAndReflection;
 using csharp_learning.Part4.KeyMechanisms.Chapter24_Serialization;
 using csharp_learning.Part4.KeyMechanisms.Chapter25_InteractionWithWinRTComponents;
+using csharp_learning.Part5.Multithreading.Chapter26_ExecutionThreads;
+using csharp_learning.Part5.Multithreading.Chapter27_AsynchronousCalculationOperations;
 
 namespace csharp_learning;
 
@@ -27,7 +29,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var chapter = new Chapter25Class();
+        var chapter = new Chapter27Class();
         chapter.Execute();
     }
 }

@@ -32,6 +32,7 @@
     <Folder Include="Part4.KeyMechanisms\Chapter25_InteractionWithWinRTComponents\images\" />
     <Folder Include="Part5.Multithreading\Chapter26_ExecutionThreads\images\" />
     <Folder Include="Part5.Multithreading\Chapter27_AsynchronousCalculationOperations\images\" />
+    <Folder Include="Part5.Multithreading\Chapter28_IOAsynhronousOperations\images\" />
   </ItemGroup>
 
 </Project>

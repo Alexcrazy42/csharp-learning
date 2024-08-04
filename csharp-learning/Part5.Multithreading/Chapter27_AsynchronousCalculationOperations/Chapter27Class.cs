@@ -88,9 +88,9 @@ public class Chapter27Class
 
         // Создание и запуск задания с продолжением
         CancellationToken ct = new CancellationToken();
-        Task<Int32> t = new Task<Int32>(() => Sum(ct, 10000));
+        Task<Int32> t1 = new Task<Int32>(() => Sum(ct, 10000));
 
-        t.Start();
+        t1.Start();
 
 
         // Метод ContinueWith возвращает объект Task, но обычно
@@ -141,7 +141,7 @@ public class Chapter27Class
         // ПРИМЕР 7
         // TaskFactory
 
-        Task parent = new Task(() =>
+        Task parent1 = new Task(() =>
         {
             var cts = new CancellationTokenSource();
             var tf = new TaskFactory<Int32>(cts.Token,
@@ -174,7 +174,7 @@ public class Chapter27Class
 
         });
 
-        parent.ContinueWith(p =>
+        parent1.ContinueWith(p =>
         {
             // текст помщен в StringBuilder и однократно вызван
             // метод Console.WriteLine просто потому, что это задание 
@@ -191,7 +191,7 @@ public class Chapter27Class
             Console.WriteLine(sb.ToString());
         }, TaskContinuationOptions.OnlyOnFaulted);
 
-        parent.Start();
+        parent1.Start();
 
 
 

@@ -23,6 +23,7 @@ using csharp_learning.Part4.KeyMechanisms.Chapter25_InteractionWithWinRTComponen
 using csharp_learning.Part5.Multithreading.Chapter26_ExecutionThreads;
 using csharp_learning.Part5.Multithreading.Chapter27_AsynchronousCalculationOperations;
 using csharp_learning.Part5.Multithreading.Chapter28_IOAsynhronousOperations;
+using csharp_learning.Part5.Multithreading.Chapter29_PrimitiveDesignsOfThreadSynchronization;
 
 namespace csharp_learning;
 
@@ -30,7 +31,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var chapter = new Chapter28Class();
+        var chapter = new Chapter29Class();
         chapter.Execute();
     }
 }

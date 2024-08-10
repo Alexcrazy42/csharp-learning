@@ -34,6 +34,7 @@
     <Folder Include="Part5.Multithreading\Chapter27_AsynchronousCalculationOperations\images\" />
     <Folder Include="Part5.Multithreading\Chapter28_IOAsynhronousOperations\images\" />
     <Folder Include="Part5.Multithreading\Chapter29_PrimitiveDesignsOfThreadSynchronization\images\" />
+    <Folder Include="Part5.Multithreading\Chapter30_HybridDesignsOfThreadSynchronization\images\" />
   </ItemGroup>
 
 </Project>

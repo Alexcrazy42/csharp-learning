@@ -58,14 +58,14 @@ public class Chapter27Class
         // ПРИМЕР 4.
         // Отмена заданий через CancellationToken
 
-        var cts = new CancellationTokenSource();
-        Task<Int32> t = new Task<Int32>(() => Sum(cts.Token, 10000), cts.Token);
+        var cts3 = new CancellationTokenSource();
+        Task<Int32> t = new Task<Int32>(() => Sum(cts3.Token, 10000), cts.Token);
 
         t.Start();
 
         // отменим cts, чтобы отменить Task
         // это асинхронный запрос, задача уже может быть завершена
-        cts.Cancel();
+        cts3.Cancel();
 
         try
         {

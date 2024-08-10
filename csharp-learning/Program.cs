@@ -24,6 +24,7 @@ using csharp_learning.Part5.Multithreading.Chapter26_ExecutionThreads;
 using csharp_learning.Part5.Multithreading.Chapter27_AsynchronousCalculationOperations;
 using csharp_learning.Part5.Multithreading.Chapter28_IOAsynhronousOperations;
 using csharp_learning.Part5.Multithreading.Chapter29_PrimitiveDesignsOfThreadSynchronization;
+using csharp_learning.Part5.Multithreading.Chapter30_HybridDesignsOfThreadSynchronization;
 
 namespace csharp_learning;
 
@@ -31,7 +32,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var chapter = new Chapter29Class();
+        var chapter = new Chapter30Class();
         chapter.Execute();
     }
 }

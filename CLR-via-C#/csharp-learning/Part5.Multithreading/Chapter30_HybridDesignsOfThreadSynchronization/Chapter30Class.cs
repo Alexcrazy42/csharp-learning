@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Concurrent;
+using System.Threading;
 
 namespace csharp_learning.Part5.Multithreading.Chapter30_HybridDesignsOfThreadSynchronization;
 
@@ -32,6 +33,33 @@ public class Chapter30Class
         // Так как имя отлично от null, делегат не запускается и имя не меняется
         LazyInitializer.EnsureInitialized(ref name, () => "Richter");
         Console.WriteLine(name);
+
+        // ПРИМЕР 11
+        var bl = new BlockingCollection<Int32>(new ConcurrentQueue<Int32>());
+        
+        // Поток пула получает элементы
+        ThreadPool.QueueUserWorkItem(ConsumeItems, bl);
+        // Добавляем в коллекцию 5 элементов
+        for (Int32 item = 0; item < 5; item++)
+        {
+            Console.WriteLine("Producing: " + item);
+            bl.Add(item);
+        }
+        // Информируем поток-потребитель, что больше элементов не будет
+        bl.CompleteAdding();
+        Console.ReadLine();
+    }
+
+    private static void ConsumeItems(Object o)
+    {
+        var bl = (BlockingCollection<Int32>)o;
+        // Блокируем до получения элемента, затем обрабатываем его
+        foreach (var item in bl.GetConsumingEnumerable())
+        {
+            Console.WriteLine("Consuming: " + item);
+        }
+        // Коллекция пуста и там больше не будет элементов
+        Console.WriteLine("All items have been consumed");
     }
 }
 
@@ -297,5 +325,129 @@ internal sealed class ConditionVariablePattern
         Monitor.PulseAll(m_lock); // Будим всех ожидающих ПОСЛЕ отмены блокировки
 
         Monitor.Exit(m_lock); // Снятие блокировки
+    }
+}
+
+
+// ПРИМЕР 10
+
+public enum OneManyMode { Exclusive, Shared };
+
+public sealed class AsyncOneManyLock
+{
+    #region Lock code
+    private SpinLock m_lock = new SpinLock(true); // не используемый readonly с SpinLock
+
+    private void Lock()
+    {
+        Boolean taken = false;
+        m_lock.Enter(ref taken);
+    }
+
+    private void Unlock()
+    {
+        m_lock.Exit();
+    }
+    #endregion
+
+    #region Losk state and helper methods
+
+    private Int32 m_state = 0;
+    private Boolean IsFree { get { return m_state == 0; } }
+    private Boolean IsOwnedByWriter { get { return m_state == 1; } }
+    private Boolean IsOwnedByReaders { get { return m_state > 0; } }
+    private Int32 AddReaders(Int32 count) { return m_state += count; }
+    private Int32 SubtractReader() { return m_state; }
+    private void MakeWriter() { m_state = 1; }
+    private void MakeFree() { m_state = 0; }
+    #endregion
+
+    // Для отсутствия конкуренции (с целью улучшения производительности
+    // и сокращения затрат памяти)
+    private readonly Task m_noContentionAccessGranter;
+
+    // Каждый ожидающий поток записи пробуждается через свой объект
+    // TaskCompletionSource, находящийся в очереди
+    private readonly Queue<TaskCompletionSource<Object>> m_qWaitingWriters = new Queue<TaskCompletionSource<Object>>();
+
+    // Все ожидающие потоки чтения пробуждаются по одному
+    // объекту TaskCompletionSource
+    private TaskCompletionSource<Object> m_waitingReadersSignal = new TaskCompletionSource<Object>();
+    private Int32 m_numWaitingReaders = 0;
+
+    public AsyncOneManyLock()
+    {
+        m_noContentionAccessGranter = Task.FromResult<Object>(null);
+    }
+
+    public Task WaitAsync(OneManyMode mode)
+    {
+        Task accressGranter = m_noContentionAccessGranter; // Предполагается
+                                                           // отсутствие конкуренции
+        Lock();
+        switch (mode)
+        {
+            case OneManyMode.Exclusive:
+                if (IsFree)
+                {
+                    MakeWriter(); // Без конкуренции
+                }
+                else
+                {
+                    // Конкуренция: ставим в очередь новое задание записи
+                    var tcs = new TaskCompletionSource<Object>();
+                    m_qWaitingWriters.Enqueue(tcs);
+                    accressGranter = tcs.Task;
+                }
+                break;
+
+            case OneManyMode.Shared:
+                if (IsFree || (IsOwnedByReaders && m_qWaitingWriters.Count == 0))
+                {
+                    AddReaders(1); // Отсутствие конкуренции
+                }
+                else
+                { 
+                    // Конкуренция
+                    // Увеличиваем количество ожидающих заданий чтения
+                    m_numWaitingReaders++;
+                    accressGranter = m_waitingReadersSignal.Task.ContinueWith(t => t.Result);
+                }
+                break;
+        }
+        Unlock();
+        return accressGranter;
+    }
+
+    public void Release()
+    {
+        TaskCompletionSource<Object> accessGranter = null;
+        Lock();
+        if (IsOwnedByWriter) MakeFree(); // Ушло задание записи
+        else SubtractReader(); // Ушло задание чтения
+        if (IsFree)
+        {
+            // Если ресурс свободен, пробудить одно ожидающее задание записи
+            // или все задания чтения
+            if (m_qWaitingWriters.Count > 0)
+            {
+                MakeWriter();
+                accessGranter = m_qWaitingWriters.Dequeue();
+            }
+            else if (m_numWaitingReaders > 0)
+            {
+                AddReaders(m_numWaitingReaders);
+                m_numWaitingReaders = 0;
+                accessGranter = m_waitingReadersSignal;
+                // Создание нового объекта TCS для будущих заданий,
+                // которым придется ожидать
+                m_waitingReadersSignal = new TaskCompletionSource<Object>();
+            }
+        }
+        Unlock();
+
+        // Пробуждение задания чтения/записи вне блокировки снижает
+        // вероятность конкуренции и повышает производительность
+        if (accessGranter != null) accessGranter.SetResult(null);
     }
 }

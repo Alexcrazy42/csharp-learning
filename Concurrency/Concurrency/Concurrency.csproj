@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Chapter3.AsyncThreads\images\" />
+    <Folder Include="Chapter4.ParallelBasics\images\" />
+    <Folder Include="Chapter5.DataFlowBasics\images\" />
+  </ItemGroup>
+
 </Project>

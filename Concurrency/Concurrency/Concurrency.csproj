@@ -12,10 +12,14 @@
     <Folder Include="Chapter4.ParallelBasics\images\" />
     <Folder Include="Chapter5.DataFlowBasics\images\" />
     <Folder Include="Chapter6.SystemReactiveBasics\images\" />
+    <Folder Include="Chapter7.Testing\images\" />
+    <Folder Include="Chapter8.Interaction\images\" />
+    <Folder Include="Chapter9.Collections\images\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Reactive" Version="6.0.0" />
+    <PackageReference Include="xunit" Version="2.9.0" />
   </ItemGroup>
 
 </Project>

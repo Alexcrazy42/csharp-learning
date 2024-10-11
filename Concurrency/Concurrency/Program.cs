@@ -9,6 +9,7 @@ using Concurrency.Chapter8.Interaction;
 using Concurrency.Chapter9.Collections;
 using Concurrency.Chapter10.Cancellation;
 using Concurrency.Chapter11.OOPGoodMatchingWithFunctional;
+using Concurrency.Chapter12.Synchronization;
 
-IChapter chapter = new Chapter11Class();
+IChapter chapter = new Chapter12Class();
 await chapter.Execute();

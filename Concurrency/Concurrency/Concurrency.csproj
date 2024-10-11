@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,6 +10,7 @@
   <ItemGroup>
     <Folder Include="Chapter10.Cancellation\images\" />
     <Folder Include="Chapter11.OOPGoodMatchingWithFunctional\images\" />
+    <Folder Include="Chapter12.Synchronization\images\" />
     <Folder Include="Chapter3.AsyncThreads\images\" />
     <Folder Include="Chapter4.ParallelBasics\images\" />
     <Folder Include="Chapter5.DataFlowBasics\images\" />
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />
     <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
     <PackageReference Include="xunit" Version="2.9.0" />

@@ -12,7 +12,10 @@
 
 6. Глава 13: 13.2, 13.4, 13,3
 
-7. Глава 14: 14.2, 14.6
+7. Глава 14: целиком
+
+8. Приложение Б: Распознавание и интерпретация асинхронных паттернов
+
 
 # Структура книги
 
@@ -66,6 +69,92 @@ ImmutableList<T> (см. рецепт 9.2). Это означает, что в д
 
 4. Никогда не выполняйте произвольный код при удержании блокировки
 
+8. Асинхронные паттерны
+
+1. TAP (Task Asynchronous Pattern) - современный паттерн
+
+2. APM (Asynchronous Programming Model) - характерный признак - объекты IAsyncResult в сочетании с парой методов,
+управляющих операцией; имя одного начинается с Begin, а имя другого - с End.
+
+Пример типа с APM API:
+
+```
+class MyHttpClient
+{
+    public IAsyncResult BeginGetString(Uri requestUri,
+        AsyncCallback callback, object state);
+
+    public string EndGetString(IAsyncResult asyncResult);
+
+    // Синхронный эквивалент для сравнения
+    public string GetString(Uri requestUri);
+}
+```
+
+3. EAP (Event Asynchronous Pattern) - "метод/событие". 
+
+Имя метода обычно завершается суффиксом Async, и он 
+в конечном итоге приводит к выдаче события, имя которого завершается 
+суффиксом Completed.
+
+Пример типа с EAP API:
+
+```
+class GetStringCompletedEventArgs : AsyncCompletedEventArgs
+{
+    public string Result { get; }
+}
+
+class MyHttpClient
+{
+    public void GetStringAsync(Uri requestUri);
+    public event Action<object, GetStringCompletedEventArgs> GetStringCompleted;
+
+    // Синхронный эквивалент для сравнения
+    public string GetString(Uri requestUri);
+}
+```
+
+4. Стиль передачи продолжений (CPS)
+
+Пример:
+
+```
+class MyHttpClient
+{
+ public void GetString(Uri requestUri, Action<Exception, string> done);
+
+ // Синхронный эквивалент для сравнения
+ public string GetString(Uri requestUri);
+}
+```
+
+5. Нестандартные асинхронные паттерны
+
+Нестандартные паттерны не обладают общими характеристиками, поэтому 
+распознать их труднее всего. К счастью, нестандартные асинхронные 
+паттерны встречаются редко.
+
+Пример типа с нестандартным асинхронным API:
+
+```
+class MyHttpClient
+{
+    public void GetString(Uri requestUri, MyHttpClientAsynchronousOperation operation);
+
+    // Синхронный эквивалент для сравнения
+    public string GetString(Uri requestUri);
+}
+```
+
+6. ISynchronizeInvoke
+
+Так как паттерн ISynchronizeInvoke подразумевает существование множественных 
+событий в модели подписки, правильный способ потребления 
+этих компонентов заключается в преобразовании событий в наблюдаемый поток — с 
+использованием либо FromEvent (см. рецепт 6.1), либо Observable.Create.
+
+ 
 # Вопросы
 
 1. В чем прикол потокобезопасных коллекций, если автор пишет, что надо чтобы операции были

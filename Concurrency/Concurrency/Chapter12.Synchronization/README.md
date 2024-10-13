@@ -235,16 +235,130 @@ ManualResetEventSlim является синхронным сигналом, поэтому WaitForInitialization
 
 ## Решение
 
+TaskCompletionSource<T> для того, чтобы отправить уведомление асинхронно, если уведомление должно быть отправлено
+только один раз.
+
+Библиотека Nito.AsyncEx содержит тип AsyncManualResetEvent — приблизительный аналог ManualResetEvent 
+для асинхронного кода. Следующий пример является искусственным, но показывает, как правильно 
+использовать тип AsyncManualResetEvent:
+
+```
+class MyClass
+{
+	private readonly AsyncManualResetEvent _connected = new AsyncManualResetEvent();
+	
+	public async Task WaitForConnectedAsync()
+	{
+		await _connected.WaitAsync();
+	}
+
+	public void ConnectedChanged(bool connected)
+	{
+		if (connected)
+			_connected.Set();
+		else
+			_connected.Reset();
+	}
+}
+```
+
+
 ## Пояснение
+
+Сигналы представляют собой механизм уведомлений общего назначения. 
+Но если этот «сигнал» представляет собой сообщение, используемое для 
+отправки данных от одной части кода в другую, рассмотрите возможность использования 
+очереди «производитель/потребитель». Не стоит 
+использовать и сигналы общего назначения для простой координации 
+доступа к общим данным; в таких ситуациях следует применять асинхронную блокировку
 
 # 12.5. Регулировка
 
 ## Задача
 
+Имеется код с высокой степенью конкуренции - даже слишком высокой. Требуется найти способ скорректировать 
+конкуретность.
+
+Конкурентность оказывается чрезмерной, если части приложения не успевают друг за другом, элементы данных накапливаются
+и занимают память. В этом сценарии регулировка частей кода может предотвратить проблемы с памятью.
+
 ## Решение
+
+Все представленные решения ограничивают конкурентность конкретным 
+значением. В Reactive Extensions предусмотрены более разнообразные 
+возможности — например, скользящие временные окна; регулировка по 
+наблюдаемым объектам System.Reactive более подробно рассматривается 
+в рецепте 6.4.
+
+В Dataflow и в параллельном коде существуют встроенные параметры 
+для регулировки степени конкурентности:
+
+```
+IPropagatorBlock<int, int> DataflowMultiplyBy2()
+{
+	var options = new ExecutionDataflowBlockOptions
+	{
+		MaxDegreeOfParallelism = 10
+	};
+
+	return new TransformBlock<int, int>(data => data * 2, options);
+}
+
+// Использование Parallel LINQ (PLINQ)
+IEnumerable<int> ParallelMultiplyBy2(IEnumerable<int> values)
+{
+	return values.AsParallel()
+		.WithDegreeOfParallelism(10)
+		.Select(item => item * 2);
+}
+
+// Использование класса Parallel
+void ParallelRotateMatrices(IEnumerable<Matrix> matrices, float degrees)
+{
+	var options = new ParallelOptions
+	{
+		MaxDegreeOfParallelism = 10
+	};
+
+	Parallel.ForEach(matrices, options, matrix => matrix.Rotate(degrees));
+}
+```
+
+Конкурентный асинхронный код может регулироваться с помощью 
+SemaphoreSlim:
+
+```
+async Task<string[]> DownloadUrlsAsync(HttpClient client,
+ IEnumerable<string> urls)
+{
+	using var semaphore = new SemaphoreSlim(10);
+	
+	Task<string>[] tasks = urls.Select(async url =>
+	{
+		await semaphore.WaitAsync();
+		try
+		{
+			return await client.GetStringAsync(url);
+		}
+		finally
+		{
+			semaphore.Release();
+		}
+	}).ToArray();
+	return await Task.WhenAll(tasks);
+}
+```
+
 
 ## Пояснение
 
+Регулировка может быть необходимой тогда, когда вы обнаруживаете, 
+что код задействует слишком много ресурсов (например, процессорного 
+времени или сетевых подключений). Учтите, что конечные пользователи 
+обычно работают на машинах, менее мощных, чем у разработчиков, поэтому 
+чрезмерная регулировка обычно лучше недостаточной.
 
 
-lock, ManualResetEventSlim, AutoResetEvent, CountdownEvent, Barrier, Nito.AsyncEx.AsyncLock
+lock, ManualResetEventSlim, AutoResetEvent, CountdownEvent, Barrier, Nito.AsyncEx.AsyncLock, TaskCompletionSource,
+
+Nito.Asyncex.AsyncManualResetEvent

@@ -11,6 +11,8 @@
     <Folder Include="Chapter10.Cancellation\images\" />
     <Folder Include="Chapter11.OOPGoodMatchingWithFunctional\images\" />
     <Folder Include="Chapter12.Synchronization\images\" />
+    <Folder Include="Chapter13.Planning\images\" />
+    <Folder Include="Chapter14.Scenarios\images\" />
     <Folder Include="Chapter3.AsyncThreads\images\" />
     <Folder Include="Chapter4.ParallelBasics\images\" />
     <Folder Include="Chapter5.DataFlowBasics\images\" />
